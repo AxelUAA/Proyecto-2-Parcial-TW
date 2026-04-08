@@ -105,4 +105,71 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, login };
+// PUT /api/auth/profile
+const updateProfile = async (req, res) => {
+    try {
+        // req.user is populated by the authMiddleware
+        const userId = req.user.id;
+        const { name, email, currentPassword, newPassword } = req.body;
+
+        if (!name || !email) {
+            return res.status(400).json({ message: 'El nombre y correo electrónico son obligatorios.' });
+        }
+
+        // Fetch current user from DB to verify existence and password if needed
+        const [users] = await pool.execute('SELECT * FROM users WHERE id = ?', [userId]);
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+        const user = users[0];
+
+        // Ensure email isn't taken by someone else
+        const [existing] = await pool.execute('SELECT id FROM users WHERE email = ? AND id != ?', [email, userId]);
+        if (existing.length > 0) {
+            return res.status(400).json({ message: 'Este correo electrónico ya está en uso por otra cuenta.' });
+        }
+
+        let hashedPassword = user.password;
+
+        // If they want to change the password
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.status(400).json({ message: 'Debes proporcionar tu contraseña actual para establecer una nueva.' });
+            }
+            if (newPassword.length < 6) {
+                return res.status(400).json({ message: 'La nueva contraseña debe tener al menos 6 caracteres.' });
+            }
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'La contraseña actual es incorrecta.' });
+            }
+            const salt = await bcrypt.genSalt(10);
+            hashedPassword = await bcrypt.hash(newPassword, salt);
+        }
+
+        // Update user
+        await pool.execute(
+            'UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?',
+            [name, email, hashedPassword, userId]
+        );
+
+        // Generate a fresh token with updated info
+        const token = jwt.sign(
+            { id: userId, email, role: user.role, name },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+        );
+
+        res.json({
+            message: 'Perfil actualizado con éxito',
+            token,
+            user: { id: userId, name, email, role: user.role }
+        });
+
+    } catch (error) {
+        console.error('Error al actualizar perfil:', error);
+        res.status(500).json({ message: 'Error en el servidor al actualizar el perfil.' });
+    }
+};
+
+module.exports = { register, login, updateProfile };
