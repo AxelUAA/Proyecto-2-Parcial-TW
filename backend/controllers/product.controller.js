@@ -61,12 +61,18 @@ const getById = async (req, res) => {
 // POST /api/products
 const create = async (req, res) => {
     try {
-        const { name, short_description, description, price, image_url, category_id, brand, stock, featured } = req.body;
+        const { name, short_description, description, price, category_id, brand, stock, featured } = req.body;
+
+        // Si se subió una imagen, construimos la ruta, si no, tomamos la que venga en el body o vacío.
+        const image_url = req.file ? `/uploads/products/${req.file.filename}` : (req.body.image_url || '');
+
+        // FormData convierte booleanos a strings, aseguremonos de evaluarlo correcto
+        const isFeatured = featured === 'true' || featured === true ? 1 : 0;
 
         const [result] = await pool.execute(
             `INSERT INTO products (name, short_description, description, price, image_url, category_id, brand, stock, featured) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [name, short_description || '', description || '', price, image_url || '', category_id, brand, stock || 0, featured ? 1 : 0]
+            [name, short_description || '', description || '', price, image_url, category_id, brand, stock || 0, isFeatured]
         );
 
         res.status(201).json({
@@ -82,15 +88,26 @@ const create = async (req, res) => {
 // PUT /api/products/:id
 const update = async (req, res) => {
     try {
-        const { name, short_description, description, price, image_url, category_id, brand, stock, featured } = req.body;
+        const { name, short_description, description, price, category_id, brand, stock, featured } = req.body;
+        
+        let updateQuery = `UPDATE products SET name = ?, short_description = ?, description = ?, price = ?, 
+                           category_id = ?, brand = ?, stock = ?, featured = ?`;
+        const isFeatured = featured === 'true' || featured === true ? 1 : 0;
+        let updateParams = [name, short_description, description, price, category_id, brand, stock, isFeatured];
 
-        const [result] = await pool.execute(
-            `UPDATE products 
-             SET name = ?, short_description = ?, description = ?, price = ?, image_url = ?, 
-                 category_id = ?, brand = ?, stock = ?, featured = ?
-             WHERE id = ?`,
-            [name, short_description, description, price, image_url, category_id, brand, stock, featured ? 1 : 0, req.params.id]
-        );
+        if (req.file) {
+            updateQuery += `, image_url = ?`;
+            updateParams.push(`/uploads/products/${req.file.filename}`);
+        } else if (req.body.image_url !== undefined) {
+             // Por si mandan una imagen de URL o la quieren limpiar
+             updateQuery += `, image_url = ?`;
+             updateParams.push(req.body.image_url);
+        }
+
+        updateQuery += ` WHERE id = ?`;
+        updateParams.push(req.params.id);
+
+        const [result] = await pool.execute(updateQuery, updateParams);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Producto no encontrado' });
