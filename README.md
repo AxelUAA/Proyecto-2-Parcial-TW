@@ -44,4 +44,5 @@ ng serve
 
 ## Autor
 
-[Tu nombre aquí]
+Axel Murillo Lopez
+Omar Romero Lopez
