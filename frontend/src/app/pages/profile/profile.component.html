@@ -1,0 +1,78 @@
+<div class="page-wrapper">
+  <div class="container profile-container">
+    <div class="section-header" style="text-align: center;">
+      <span class="section-tag">Ajustes de cuenta</span>
+      <h1 class="section-title">Mi <span>Perfil</span></h1>
+      <p style="color: var(--text-secondary); margin-top: 1rem;">Administra tu información personal y credenciales de seguridad</p>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          {{ profileForm.get('name')?.value?.charAt(0) | uppercase }}
+        </div>
+        <div>
+          <h2 class="profile-name">{{ profileForm.get('name')?.value || 'Usuario' }}</h2>
+          <span class="role-badge">{{ userRole }}</span>
+        </div>
+      </div>
+
+      <!-- Alertas -->
+      @if (successMessage) {
+        <div class="alert alert-success">{{ successMessage }}</div>
+      }
+      @if (errorMessage) {
+        <div class="alert alert-error">{{ errorMessage }}</div>
+      }
+
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="form-container">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label>NOMBRE COMPLETO *</label>
+          <input type="text" formControlName="name" placeholder="Ej. Axel González" />
+          @if (isFieldInvalid('name')) {
+            <small class="error-text">El nombre es obligatorio y debe tener al menos 3 caracteres.</small>
+          }
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="form-group">
+          <label>CORREO ELECTRÓNICO *</label>
+          <input type="email" formControlName="email" placeholder="tu@email.com" />
+          @if (isFieldInvalid('email')) {
+            <small class="error-text">Por favor ingresa un formato de correo electrónico válido.</small>
+          }
+        </div>
+
+        <hr class="divider">
+        <h3 class="security-title">Cambiar Contraseña (Opcional)</h3>
+        <p class="security-desc">Solo llena estos campos si deseas modificar tu contraseña actual.</p>
+
+        <!-- Current Password -->
+        <div class="form-group">
+          <label>CONTRASEÑA ACTUAL</label>
+          <input type="password" formControlName="currentPassword" placeholder="Ingresa tu contraseña actual" />
+        </div>
+
+        <!-- New Password -->
+        <div class="form-group">
+          <label>NUEVA CONTRASEÑA</label>
+          <input type="password" formControlName="newPassword" placeholder="Mínimo 6 caracteres" />
+          @if (isFieldInvalid('newPassword')) {
+            <small class="error-text">La nueva contraseña debe tener al menos 6 caracteres.</small>
+          }
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="isLoading">
+            @if (isLoading) {
+              <span class="spinner-small"></span> Guardando...
+            } @else {
+              Guardar Cambios
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

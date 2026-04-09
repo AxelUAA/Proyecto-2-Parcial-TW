@@ -1,0 +1,138 @@
+<div class="page-wrapper">
+  <div class="contact-page">
+    <div class="container-sm">
+
+      <div class="section-header">
+        <span class="section-tag">Contacto</span>
+        <h1 class="section-title">Contáctanos <span></span></h1>
+        <p class="section-subtitle">¿Tienes alguna duda? Nuestro equipo está aquí para ayudarte.</p>
+      </div>
+
+      <div class="contact-layout">
+
+        <!-- Info Cards -->
+        <div class="contact-info">
+          <div class="info-card">
+            <span class="info-icon"></span>
+            <div>
+              <h4>Ubicación</h4>
+              <p>Guadalajara, Jalisco, México</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon"></span>
+            <div>
+              <h4>Email</h4>
+              <p>hola&#64;backpackboyz.mx</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon"></span>
+            <div>
+              <h4>Horario</h4>
+              <p>Lun – Vie, 9am – 6pm</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="contact-form-card">
+          <!-- Status Message (Signal) -->
+          @if (statusMessage()) {
+            <div class="alert" [class.alert-success]="isSuccess()" [class.alert-error]="!isSuccess()">
+              {{ statusMessage() }}
+            </div>
+          }
+
+          <!-- Template-driven form con ngModel -->
+          <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" class="contact-form" novalidate>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="name">Nombre</label>
+                <input
+                  id="name"
+                  type="text"
+                  class="form-control"
+                  placeholder="Tu nombre completo"
+                  [(ngModel)]="contact.name"
+                  name="name"
+                  required
+                  #nameField="ngModel"
+                />
+                @if (nameField.invalid && nameField.touched) {
+                  <span class="form-error">El nombre es requerido</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  class="form-control"
+                  placeholder="tu@email.com"
+                  [(ngModel)]="contact.email"
+                  name="email"
+                  required
+                  email
+                  #emailField="ngModel"
+                />
+                @if (emailField.invalid && emailField.touched) {
+                  <span class="form-error">Email válido requerido</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="subject">Asunto</label>
+              <input
+                id="subject"
+                type="text"
+                class="form-control"
+                placeholder="¿En qué te podemos ayudar?"
+                [(ngModel)]="contact.subject"
+                name="subject"
+                required
+                #subjectField="ngModel"
+              />
+              @if (subjectField.invalid && subjectField.touched) {
+                <span class="form-error">El asunto es requerido</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="message">Mensaje</label>
+              <textarea
+                id="message"
+                class="form-control"
+                placeholder="Escribe tu mensaje aquí..."
+                [(ngModel)]="contact.message"
+                name="message"
+                required
+                rows="5"
+                #messageField="ngModel"
+              ></textarea>
+              @if (messageField.invalid && messageField.touched) {
+                <span class="form-error">El mensaje es requerido</span>
+              }
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg submit-btn"
+              [disabled]="isLoading || contactForm.invalid"
+            >
+              @if (isLoading) {
+                <span class="btn-spinner"></span> Enviando...
+              } @else {
+                Enviar mensaje 
+              }
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

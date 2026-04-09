@@ -1,0 +1,63 @@
+<div class="auth-page page-wrapper">
+  <div class="auth-container">
+    <div class="auth-card">
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-logo"></div>
+        <h1>Bienvenido de vuelta</h1>
+        <p>Inicia sesión en tu cuenta BackpackBoyz</p>
+      </div>
+
+      <!-- Error -->
+      @if (errorMessage) {
+        <div class="alert alert-error"> {{ errorMessage }}</div>
+      }
+
+      <!-- Form -->
+      <form (submit)="onSubmit()" #loginForm="ngForm" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            placeholder="tu@email.com"
+            [(ngModel)]="email"
+            name="email"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Contraseña</label>
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            placeholder="••••••••"
+            [(ngModel)]="password"
+            name="password"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg auth-btn"
+          [disabled]="isLoading"
+        >
+          @if (isLoading) {
+            <span class="btn-spinner"></span> Iniciando sesión...
+          } @else {
+            Iniciar sesión 
+          }
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="auth-footer">
+        <p>¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+      </div>
+    </div>
+  </div>
+</div>

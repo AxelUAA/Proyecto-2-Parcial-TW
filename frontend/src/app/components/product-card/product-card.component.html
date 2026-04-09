@@ -1,0 +1,56 @@
+<div class="product-card" [routerLink]="['/product', product.id]">
+  @if (auth.isAdmin()) {
+    <a [routerLink]="['/edit-product', product.id]" class="admin-edit-btn" (click)="$event.stopPropagation()">
+      ✎ Editar
+    </a>
+  }
+  <!-- Image -->
+  <div class="card-image">
+    <img
+      [src]="imageUrl"
+      [alt]="product.name"
+      (error)="$any($event.target).src = fallbackImage"
+    />
+    <!-- Availability Badge -->
+    <div class="card-badge" [ngClass]="isAvailable ? 'badge-success' : 'badge-error'">
+      {{ isAvailable ? 'Disponible' : 'Agotado' }}
+    </div>
+    <!-- Overlay -->
+    <div class="card-overlay">
+      <button
+        class="btn btn-primary quick-add"
+        [disabled]="!isAvailable"
+        (click)="onAddToCart($event)"
+      >
+         Agregar al Carrito
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="card-content">
+    <div class="card-meta">
+      <span class="card-brand">{{ product.brand | titlecase }}</span>
+      @if (product.category_name) {
+        <span class="card-category">{{ product.category_name | titlecase }}</span>
+      }
+    </div>
+
+    <h3 class="card-name">{{ product.name }}</h3>
+
+    @if (product.short_description) {
+      <p class="card-desc">{{ product.short_description }}</p>
+    }
+
+    <div class="card-footer">
+      <span class="card-price">{{ product.price | currency:'MXN':'symbol':'1.0-0' }}</span>
+      <span class="card-stock" [ngClass]="isAvailable ? 'stock-ok' : 'stock-out'">
+        @if (isAvailable) {
+          {{ product.stock }} en stock
+        } @else {
+          Sin stock
+        }
+      </span>
+    </div>
+  </div>
+</div>
