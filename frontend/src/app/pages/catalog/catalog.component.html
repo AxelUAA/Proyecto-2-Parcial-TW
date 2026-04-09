@@ -1,0 +1,66 @@
+<div class="page-wrapper">
+  <div class="catalog-page">
+    <div class="container">
+
+      <!-- Header -->
+      <div class="catalog-header">
+        <div>
+          <span class="section-tag">Tienda</span>
+          <h1 class="section-title">Nuestro <span>Catálogo</span></h1>
+          <p class="section-subtitle">{{ filteredProducts.length }} productos disponibles</p>
+        </div>
+      </div>
+
+      <!-- Notification -->
+      @if (cartMessage) {
+        <div class="cart-notification" [class.error]="cartMessage.startsWith('')">
+          {{ cartMessage }}
+        </div>
+      }
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <button
+          class="filter-btn"
+          [class.active]="activeFilter() === 'all'"
+          (click)="filterByCategory('all')"
+        >
+           Todos
+        </button>
+        @for (category of categories; track category.id) {
+          <button
+            class="filter-btn"
+            [class.active]="activeFilter() === category.name"
+            (click)="filterByCategory(category.name)"
+          >
+            {{ category.name | titlecase }}
+          </button>
+        }
+      </div>
+
+      <!-- Products Grid -->
+      @if (isLoading) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Cargando catálogo...</p>
+        </div>
+      } @else if (filteredProducts.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon"></div>
+          <h3>No hay productos</h3>
+          <p>Prueba con otra categoría</p>
+        </div>
+      } @else {
+        <div class="products-grid">
+          @for (product of filteredProducts; track product.id) {
+            <app-product-card
+              [product]="product"
+              (addToCart)="onAddToCart($event)"
+            />
+          }
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

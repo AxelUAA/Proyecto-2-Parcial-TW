@@ -1,0 +1,87 @@
+<div class="page-wrapper">
+  <div class="cart-page">
+    <div class="container">
+
+      <div class="section-header" style="text-align:left">
+        <span class="section-tag">Mi cuenta</span>
+        <h1 class="section-title">Mi <span>Carrito</span> </h1>
+      </div>
+
+      @if (!auth.isLoggedIn()) {
+      <div class="empty-state">
+        <div class="empty-icon">🔒</div>
+        <h3>Necesitas iniciar sesión</h3>
+        <p>Para ver tu carrito debes tener una cuenta.</p>
+        <a routerLink="/login" class="btn btn-primary">Iniciar sesión</a>
+      </div>
+      } @else if (isLoading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando carrito...</p>
+      </div>
+      } @else if (cartService.cartItems().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon"></div>
+        <h3>Tu carrito está vacío</h3>
+        <p>Explora el catálogo y agrega productos que te gusten.</p>
+        <a routerLink="/catalog" class="btn btn-primary" style="margin-top: 1.5rem;">Ver Catálogo</a>
+      </div>
+      } @else {
+      <div class="cart-layout">
+
+        <!-- Items -->
+        <div class="cart-items">
+          @for (item of cartService.cartItems(); track item.id) {
+          <div class="cart-item">
+            <img [src]="getImageUrl(item.image_url)" [alt]="item.name" class="item-img" />
+            <div class="item-details">
+              <h3 class="item-name">{{ item.name }}</h3>
+              <p class="item-brand">{{ item.brand }}</p>
+              <p class="item-price">{{ item.price | currency:'MXN':'symbol':'1.0-0' }}</p>
+            </div>
+            <div class="item-controls">
+              <div class="qty-control">
+                <button class="qty-btn" (click)="updateQty(item, -1)" [disabled]="item.quantity === 1">−</button>
+                <span class="qty-value">{{ item.quantity }}</span>
+                <button class="qty-btn" (click)="updateQty(item, 1)">+</button>
+              </div>
+              <p class="item-subtotal">
+                {{ (item.price || 0) * item.quantity | currency:'MXN':'symbol':'1.0-0' }}
+              </p>
+              <button class="remove-btn" (click)="removeItem(item)" title="Eliminar">✖</button>
+            </div>
+          </div>
+          }
+        </div>
+
+        <!-- Summary -->
+        <div class="cart-summary">
+          <h2 class="summary-title">Resumen del pedido</h2>
+          <div class="summary-row">
+            <span>Subtotal ({{ cartService.cartCount() }} items)</span>
+            <span>{{ cartService.cartTotal() | currency:'MXN':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Envío</span>
+            <span class="free-shipping">GRATIS </span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-row summary-total">
+            <span>Total</span>
+            <span>{{ cartService.cartTotal() | currency:'MXN':'symbol':'1.0-0' }}</span>
+          </div>
+          <button class="btn btn-primary btn-lg checkout-btn" (click)="checkout()">
+            Realizar pedido →
+          </button>
+          <a routerLink="/catalog" class="btn btn-ghost btn-sm"
+            style="text-align:center;display:block;margin-top:0.5rem">
+            Seguir comprando
+          </a>
+        </div>
+
+      </div>
+      }
+
+    </div>
+  </div>
+</div>

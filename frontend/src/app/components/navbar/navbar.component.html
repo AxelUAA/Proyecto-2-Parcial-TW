@@ -1,0 +1,109 @@
+<nav class="navbar" [class.scrolled]="true">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <a routerLink="/" class="navbar-logo" (click)="closeMenu()">
+      <span class="logo-icon"></span>
+      <span class="logo-text">BackpackBoyz</span>
+    </a>
+
+    <!-- Nav Links Desktop -->
+    <ul class="navbar-links">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Inicio</a>
+      </li>
+      <li>
+        <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
+      </li>
+      <li>
+        <a routerLink="/contact" routerLinkActive="active">Contacto</a>
+      </li>
+      @if (auth.isAdmin()) {
+        <li>
+          <a routerLink="/add-product" routerLinkActive="active" class="admin-link">
+             Producto
+          </a>
+        </li>
+      }
+      @if (auth.isLoggedIn()) {
+        <li>
+          <a routerLink="/profile" routerLinkActive="active">Mi Perfil</a>
+        </li>
+      }
+    </ul>
+
+    <!-- Nav Actions Desktop -->
+    <div class="navbar-actions">
+      <!-- Cart -->
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/cart" class="cart-btn" title="Carrito" style="position: relative; display: flex; align-items: center; text-decoration: none; color: var(--text);">
+          <svg style="width: 24px; height: 24px; fill: currentColor;" viewBox="0 0 24 24">
+            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+          @if (cart.cartCount() > 0) {
+            <span class="cart-badge">{{ cart.cartCount() }}</span>
+          }
+        </a>
+      }
+
+      <!-- Auth -->
+      @if (auth.isLoggedIn()) {
+        <div class="user-menu">
+          <a routerLink="/profile" class="user-greeting" style="text-decoration: none; cursor: pointer;">Hola, {{ firstName }}</a>
+          <button class="btn btn-ghost btn-sm" (click)="logout()">Salir</button>
+        </div>
+      } @else {
+        <a routerLink="/login" class="btn btn-ghost btn-sm">Iniciar sesión</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm">Registro</a>
+      }
+    </div>
+
+    <!-- Hamburger -->
+    <button class="hamburger" (click)="toggleMenu()" [class.open]="menuOpen" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+@if (menuOpen) {
+  <div class="mobile-menu" (click)="closeMenu()">
+    <div class="mobile-menu-inner" (click)="$event.stopPropagation()">
+      <ul class="mobile-links">
+        <li><a routerLink="/" (click)="closeMenu()"> Inicio</a></li>
+        <li><a routerLink="/catalog" (click)="closeMenu()"> Catálogo</a></li>
+        <li><a routerLink="/contact" (click)="closeMenu()"> Contacto</a></li>
+        @if (auth.isLoggedIn()) {
+          <li><a routerLink="/cart" (click)="closeMenu()"> Carrito ({{ cart.cartCount() }})</a></li>
+          <li><a routerLink="/profile" (click)="closeMenu()"> Mi Perfil</a></li>
+        }
+        @if (auth.isAdmin()) {
+          <li><a routerLink="/add-product" (click)="closeMenu()"> Agregar Producto</a></li>
+        }
+      </ul>
+      <div class="mobile-auth">
+        @if (auth.isLoggedIn()) {
+          <a routerLink="/profile" class="mobile-user" style="display: block; text-decoration: none;" (click)="closeMenu()">Mi Perfil ({{ auth.currentUser()?.name }})</a>
+          <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
+        } @else {
+          <a routerLink="/login" class="btn btn-ghost" (click)="closeMenu()">Iniciar sesión</a>
+          <a routerLink="/register" class="btn btn-primary" (click)="closeMenu()">Registro</a>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Custom Logout Modal -->
+@if (showLogoutModal) {
+  <div class="modal-overlay" (click)="cancelLogout()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">Cerrar Sesión</h3>
+      <p class="modal-text">¿Estás seguro de que deseas salir de tu cuenta?</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" (click)="cancelLogout()">Cancelar</button>
+        <button class="btn btn-error" (click)="confirmLogout()">Sí, salir</button>
+      </div>
+    </div>
+  </div>
+}

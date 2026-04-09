@@ -1,0 +1,135 @@
+<div class="page-wrapper">
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-gradient"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <div class="hero-badge"> Nueva colección 2026</div>
+        <h1 class="hero-title">
+          Streetwear<br>
+          <span class="hero-title-accent">sin límites</span>
+        </h1>
+        <p class="hero-subtitle">
+          Ropa urban, sneakers y accesorios para los que se atreven
+          a romper el molde. Tu estilo, tus reglas.
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/catalog" class="btn btn-primary btn-lg">
+            Ver Catálogo
+          </a>
+          <a routerLink="/register" class="btn btn-secondary btn-lg">
+            Únete al equipo
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">500+</span>
+            <span class="stat-label">Productos</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-value">50+</span>
+            <span class="stat-label">Marcas</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-value">24h</span>
+            <span class="stat-label">Entrega</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-img-wrapper">
+          <div class="hero-glow"></div>
+          <div class="hero-emoji-stack">
+            <span class="floating e1"></span>
+            <span class="floating e2"></span>
+            <span class="floating e3"></span>
+            <img src="/images/ui/logo2.jpg" alt="Logo" class="hero-logo-center custom-logo-float" />
+          </div>
+          <div class="hero-circle"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Explorar</span>
+        <h2 class="section-title">Encuentra tu <span>estilo</span></h2>
+        <p class="section-subtitle">Desde hoodies hasta sneakers, tenemos todo lo que necesitas.</p>
+      </div>
+      <div class="categories-grid">
+        @for (cat of categories; track cat.name) {
+        <a [routerLink]="['/catalog']" [queryParams]="{category: cat.slug}" class="category-card">
+          <span class="cat-emoji">{{ cat.emoji }}</span>
+          <span class="cat-name">{{ cat.name }}</span>
+          <span class="cat-arrow">→</span>
+        </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Destacados</span>
+        <h2 class="section-title">Lo más <span>hot</span> </h2>
+        <p class="section-subtitle">Los productos que todo el mundo quiere.</p>
+      </div>
+
+      @if (isLoading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando productos...</p>
+      </div>
+      } @else if (featuredProducts.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon"></div>
+        <h3>No hay productos aún</h3>
+        <p>¡Pronto habrá nuevos lanzamientos!</p>
+      </div>
+      } @else {
+      <div class="products-grid">
+        @for (product of featuredProducts; track product.id) {
+        <app-product-card [product]="product" (addToCart)="onAddToCart($event)" />
+        }
+      </div>
+      <div class="view-all">
+        <a routerLink="/catalog" class="btn btn-outline btn-lg">
+          Ver todos los productos →
+        </a>
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <h2>¿Listo para brillar?</h2>
+          <p>Únete a los BackpackBoyz y accede a drops exclusivos y descuentos especiales.</p>
+          <a routerLink="/register" class="btn btn-primary btn-lg">
+            Crear cuenta gratis
+          </a>
+        </div>
+        <div class="cta-visual"></div>
+      </div>
+    </div>
+  </section>
+
+</div>

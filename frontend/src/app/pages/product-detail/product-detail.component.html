@@ -1,0 +1,108 @@
+<div class="page-wrapper">
+  <div class="detail-page">
+    <div class="container">
+
+      <div class="detail-header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <a routerLink="/catalog" class="back-link" style="margin-bottom: 0;">← Volver al catálogo</a>
+        @if (product && auth.isAdmin()) {
+          <a [routerLink]="['/edit-product', product.id]" class="btn btn-warning" style="background-color: var(--warning); color: #111; font-weight: bold; border-radius: 50px; text-decoration: none;">
+            ✎ Editar Producto
+          </a>
+        }
+      </div>
+
+      @if (isLoading) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Cargando producto...</p>
+        </div>
+      } @else if (!product) {
+        <div class="empty-state">
+          <div class="empty-icon"></div>
+          <h3>Producto no encontrado</h3>
+          <a routerLink="/catalog" class="btn btn-primary">Ver catálogo</a>
+        </div>
+      } @else {
+        <div class="detail-grid">
+
+          <!-- Image -->
+          <div class="detail-image-wrapper">
+            <img
+              [src]="imageUrl"
+              [alt]="product.name"
+              (error)="$any($event.target).src = fallbackImage"
+              class="detail-image"
+            />
+            <div class="detail-badge" [class.badge-success]="isAvailable" [class.badge-error]="!isAvailable">
+              {{ isAvailable ? '✓ Disponible' : '✗ Agotado' }}
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div class="detail-info">
+            <!-- Meta -->
+            <div class="detail-meta">
+              @if (product.brand) {
+                <span class="detail-brand">{{ product.brand | titlecase }}</span>
+              }
+              @if (product.category_name) {
+                <span class="detail-category">{{ product.category_name | titlecase }}</span>
+              }
+            </div>
+
+            <!-- Name -->
+            <h1 class="detail-name">{{ product.name }}</h1>
+
+            <!-- Price -->
+            <div class="detail-price">{{ product.price | currency:'MXN':'symbol':'1.0-0' }}</div>
+
+            <!-- Short desc -->
+            @if (product.short_description) {
+              <p class="detail-short-desc">{{ product.short_description }}</p>
+            }
+
+            <!-- Stock -->
+            <div class="detail-stock" [ngClass]="isAvailable ? 'stock-ok' : 'stock-out'">
+              @if (isAvailable) {
+                 {{ product.stock }} unidades en stock
+              } @else {
+                 Sin stock disponible
+              }
+            </div>
+
+            <!-- Cart notification -->
+            @if (cartMessage) {
+              <div class="cart-notification" [class.error]="cartMessage.startsWith('')">
+                {{ cartMessage }}
+              </div>
+            }
+
+            <!-- Quantity + Add to cart -->
+            @if (isAvailable) {
+              <div class="quantity-row">
+                <div class="qty-control">
+                  <button class="qty-btn" (click)="decreaseQty()" [disabled]="quantity === 1">−</button>
+                  <span class="qty-value">{{ quantity }}</span>
+                  <button class="qty-btn" (click)="increaseQty()" [disabled]="quantity >= product.stock">+</button>
+                </div>
+                <button class="btn btn-primary btn-lg add-cart-btn" (click)="addToCart()">
+                   Agregar al carrito
+                </button>
+              </div>
+            }
+
+            <!-- Description -->
+            @if (product.description) {
+              <div class="detail-description">
+                <h3>Descripción</h3>
+                <p>{{ product.description }}</p>
+              </div>
+            }
+
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
