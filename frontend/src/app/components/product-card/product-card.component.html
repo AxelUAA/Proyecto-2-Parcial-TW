@@ -1,8 +1,13 @@
 <div class="product-card" [routerLink]="['/product', product.id]">
   @if (auth.isAdmin()) {
-    <a [routerLink]="['/edit-product', product.id]" class="admin-edit-btn" (click)="$event.stopPropagation()">
-      ✎ Editar
-    </a>
+    <div class="admin-actions">
+      <a [routerLink]="['/edit-product', product.id]" class="admin-btn edit-btn" (click)="$event.stopPropagation()">
+        ✎ Editar
+      </a>
+      <button class="admin-btn delete-btn" (click)="onDelete($event)">
+        🗑 Eliminar
+      </button>
+    </div>
   }
   <!-- Image -->
   <div class="card-image">
@@ -54,3 +59,14 @@
     </div>
   </div>
 </div>
+
+<app-modal
+  [isOpen]="showDeleteModal"
+  [title]="'¿Eliminar producto?'"
+  [message]="'¿Estás seguro de que quieres eliminar ' + product.name + '? Esta acción es permanente.'"
+  [confirmText]="'Sí, eliminar'"
+  [cancelText]="'No, cancelar'"
+  [type]="'danger'"
+  (confirm)="confirmDelete()"
+  (cancel)="closeModal()"
+/>

@@ -60,4 +60,9 @@ export class HomeComponent implements OnInit {
     if (!this.auth.isLoggedIn()) { return; }
     this.cartService.addToCart(product.id!).subscribe();
   }
+
+  onProductDeleted(id: number): void {
+    this.featuredProducts = this.featuredProducts.filter(p => p.id !== id);
+    this.cdr.detectChanges();
+  }
 }
