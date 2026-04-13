@@ -90,4 +90,10 @@ export class CatalogComponent implements OnInit {
       }
     });
   }
+
+  onProductDeleted(id: number): void {
+    this.allProducts = this.allProducts.filter(p => p.id !== id);
+    this.applyFilter(this.activeFilter());
+    this.cdr.detectChanges();
+  }
 }

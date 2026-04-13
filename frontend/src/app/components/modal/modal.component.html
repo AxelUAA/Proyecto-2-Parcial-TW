@@ -1,0 +1,29 @@
+@if (isOpen) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-container" [ngClass]="type">
+      <div class="modal-header">
+        <div class="modal-icon">
+          @if (type === 'danger') {
+            <span class="icon-warning">⚠️</span>
+          } @else if (type === 'success') {
+            <span class="icon-success">✅</span>
+          } @else {
+            <span class="icon-info">ℹ️</span>
+          }
+        </div>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-title">{{ title }}</h2>
+        <p class="modal-message">{{ message }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-cancel" (click)="onCancel()">
+          {{ cancelText }}
+        </button>
+        <button class="btn-modal btn-confirm" [ngClass]="'btn-' + type" (click)="onConfirm()">
+          {{ confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
