@@ -6,6 +6,7 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { Product } from '../../models/product.model';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-home',
@@ -24,15 +25,15 @@ export class HomeComponent implements OnInit {
   isLoading = true;
 
   categories = [
-    { name: 'Hoodies', emoji: '', slug: 'Hoodies' },
-    { name: 'Playeras', emoji: '', slug: 'Playeras' },
-    { name: 'Sneakers', emoji: '', slug: 'Sneakers' },
-    { name: 'Accesorios', emoji: '', slug: 'Accesorios' },
-    { name: 'Pants', emoji: '', slug: 'Pants' }
+    { name: 'Hoodies', emoji: '🧥', slug: 'Hoodies', image: '/images/categories/Hoodies.png' },
+    { name: 'Playeras', emoji: '👕', slug: 'Playeras', image: '/images/categories/Playeras.png' },
+    { name: 'Sneakers', emoji: '👟', slug: 'Sneakers', image: '/images/categories/Sneakers.png' },
+    { name: 'Accesorios', emoji: '🎒', slug: 'Accesorios', image: '/images/categories/Accesorios.png' },
+    { name: 'Pants', emoji: '👖', slug: 'Pants', image: '/images/categories/Pants.png' }
   ];
 
   ngOnInit(): void {
-    fetch('http://localhost:3000/api/products?featured=true')
+    fetch(`${environment.apiUrl}/products?featured=true`)
       .then(res => res.json())
       .then(products => {
         try {
