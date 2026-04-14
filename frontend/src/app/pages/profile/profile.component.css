@@ -163,3 +163,8 @@ input:focus {
     text-align: center;
   }
 }
+
+@media (max-width: 480px) {
+  .profile-container { padding: var(--space-md) var(--space-sm); }
+  .profile-card { padding: var(--space-md); }
+}

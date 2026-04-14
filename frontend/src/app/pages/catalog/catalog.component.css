@@ -77,3 +77,22 @@
   color: white;
   font-weight: 600;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .catalog-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+  .filters-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: var(--space-md);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  .filters-bar::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+}
