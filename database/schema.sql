@@ -3,9 +3,6 @@
 -- Streetwear Store
 -- =============================================
 
-CREATE DATABASE IF NOT EXISTS backpackboyz;
-USE backpackboyz;
-
 -- Tabla de usuarios
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
