@@ -273,6 +273,17 @@
 
 .cat-emoji { font-size: 2rem; }
 
+.cat-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition-base);
+}
+
+.category-card:hover .cat-img { transform: scale(1.08); }
+
+
 .cat-name {
   font-family: var(--font-heading);
   font-weight: 700;

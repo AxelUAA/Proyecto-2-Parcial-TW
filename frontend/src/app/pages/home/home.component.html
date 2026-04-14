@@ -72,7 +72,11 @@
       <div class="categories-grid">
         @for (cat of categories; track cat.name) {
         <a [routerLink]="['/catalog']" [queryParams]="{category: cat.slug}" class="category-card">
-          <span class="cat-emoji">{{ cat.emoji }}</span>
+          @if (cat.image) {
+            <img [src]="cat.image" [alt]="cat.name" class="cat-img" />
+          } @else {
+            <span class="cat-emoji">{{ cat.emoji }}</span>
+          }
           <span class="cat-name">{{ cat.name }}</span>
           <span class="cat-arrow">→</span>
         </a>
