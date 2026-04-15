@@ -90,6 +90,15 @@
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+}
+
+.cart-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
 }
 
 .cart-btn:hover { background: var(--bg-tertiary); }
@@ -126,6 +135,14 @@
 .user-greeting {
   font-size: 0.875rem;
   color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.desktop-only-auth {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 /* Hamburger */
@@ -221,8 +238,19 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .navbar-links, .navbar-actions { display: none; }
-  .hamburger { display: flex; }
+  .navbar-container {
+    padding: 0 var(--space-md);
+    gap: var(--space-sm);
+  }
+  .navbar-links, .desktop-only-auth { display: none; }
+  .navbar-actions {
+    margin-left: auto;
+    gap: var(--space-xs);
+  }
+  .hamburger { 
+    display: flex; 
+    margin-left: var(--space-sm);
+  }
 }
 
 /* Custom Modal */

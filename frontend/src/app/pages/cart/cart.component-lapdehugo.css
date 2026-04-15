@@ -9,6 +9,7 @@
 
 /* Cart Item */
 .cart-item {
+  position: relative;
   display: flex;
   gap: var(--space-lg);
   align-items: center;
@@ -165,6 +166,23 @@
 }
 
 @media (max-width: 560px) {
-  .cart-item { flex-wrap: wrap; }
-  .item-controls { flex-direction: row; flex-wrap: wrap; width: 100%; }
+  .cart-item { flex-wrap: wrap; padding: var(--space-md); }
+  .item-img { width: 70px; height: 70px; }
+  .item-name { font-size: 0.95rem; line-height: 1.2; padding-right: var(--space-xl); }
+  .item-controls { 
+    flex-direction: row; 
+    width: 100%; 
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-md);
+    margin-top: var(--space-xs);
+  }
+  .remove-btn {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    font-size: 1.2rem;
+    padding: 0.2rem;
+  }
 }

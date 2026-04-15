@@ -216,3 +216,8 @@
 @media (max-width: 768px) {
   .detail-grid { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 480px) {
+  .quantity-row { flex-direction: column; align-items: stretch; }
+  .add-cart-btn { width: 100%; }
+}
