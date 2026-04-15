@@ -1,4 +1,4 @@
-/* Uses same styles as login - reuse */
+/* Shared Auth Styles (used by login & register) */
 .auth-page {
   display: flex;
   align-items: center;
@@ -21,12 +21,36 @@
   box-shadow: var(--shadow-lg);
 }
 
-.auth-header { text-align: center; margin-bottom: var(--space-xl); }
-.auth-logo { font-size: 3rem; margin-bottom: var(--space-md); }
-.auth-header h1 { font-size: 1.75rem; font-weight: 800; margin-bottom: var(--space-sm); }
-.auth-header p { color: var(--text-secondary); font-size: 0.95rem; }
-.auth-form { display: flex; flex-direction: column; }
-.auth-btn { width: 100%; margin-top: var(--space-sm); }
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.auth-logo {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+}
+
+.auth-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-btn {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
 
 .btn-spinner {
   display: inline-block;
@@ -47,6 +71,23 @@
   border-top: 1px solid var(--border);
 }
 
-.auth-footer p { color: var(--text-secondary); font-size: 0.9rem; }
-.auth-footer a { color: var(--accent); font-weight: 600; text-decoration: none; }
+.auth-footer p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.auth-footer a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .auth-footer a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-container { padding: var(--space-sm); }
+  .auth-card { padding: var(--space-lg); border-radius: var(--radius-xl); }
+  .auth-logo { font-size: 2.5rem; }
+  .auth-header h1 { font-size: 1.5rem; }
+}
